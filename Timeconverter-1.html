@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Converter</title>
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            text-align: center;
+            padding: 50px;
+        }
+
+        /* Container Styling */
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Input Field Styling */
+        input {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        /* Button Styling */
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        /* Result Styling */
+        p {
+            font-size: 18px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Time Converter</h2>
+        
+        <label for="time-input">Enter a time (HH:MM AM/PM or 24-hour format):</label><br>
+        <input type="text" id="time-input" placeholder="e.g., 02:30 PM or 14:30">
+        <br>
+        <button onclick="convertTime()">Convert</button>
+
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function convertTo24Hour(timeStr) {
+            let parts = timeStr.split(" ");
+            if (parts.length !== 2) return "Invalid Format";
+
+            let timeParts = parts[0].split(":");
+            let hours = parseInt(timeParts[0]);
+            let minutes = timeParts[1];
+            let amPm = parts[1].toLowerCase();
+
+            if (amPm === "pm" && hours !== 12) {
+                hours += 12;
+            } else if (amPm === "am" && hours === 12) {
+                hours = 0;
+            }
+
+            return `${String(hours).padStart(2, '0')}:${minutes}`;
+        }
+
+        function convertTo12Hour(timeStr) {
+            let timeParts = timeStr.split(":");
+            if (timeParts.length !== 2) return "Invalid Format";
+
+            let hours = parseInt(timeParts[0]);
+            let minutes = timeParts[1];
+            let amPm = hours < 12 ? "AM" : "PM";
+
+            hours = hours % 12 || 12; // Convert 0 to 12 for AM
+
+            return `${hours}:${minutes} ${amPm}`;
+        }
+
+        function convertTime() {
+            let timeInput = document.getElementById("time-input").value.trim();
+            let result = "";
+
+            if (timeInput.toLowerCase().includes("am") || timeInput.toLowerCase().includes("pm")) {
+                result = `Converted to 24-hour format: ${convertTo24Hour(timeInput)}`;
+            } else {
+                result = `Converted to 12-hour format: ${convertTo12Hour(timeInput)}`;
+            }
+
+            document.getElementById("result").innerText = result;
+        }
+    </script>
+
+</body>
+</html>
